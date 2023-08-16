@@ -8,9 +8,9 @@ interface Device {
 const devices: Device[] = [];
 const numDevices = 1000;
 
-// NATS sunucusuna bağlanma
+// NATS SERVER CONNECTION
 const natsOptions: ConnectionOptions = {
-  servers: ['nats://localhost:4222'] // NATS sunucu adresini burada belirtin
+  servers: ['nats://localhost:4222']
 };
 
 const ncPromise: Promise<NatsConnection> = connect(natsOptions);
@@ -25,7 +25,7 @@ for (let i = 0; i < numDevices; i++) {
 
 // Generate random temperature
 function generateRandomTemperature() {
-  return Math.floor(Math.random() * 50) + 10; // Random number between 10 and 59
+  return Math.floor(Math.random() * 50) + 10;
 }
 
 // Update temperature
@@ -34,15 +34,18 @@ function updateTemperature(device: Device) {
 }
 
 ncPromise.then(nc => {
+  console.log('Connected to NATS server.');
   setInterval(() => {
     devices.forEach((device) => {
+      console.log(`Device ${device.id} - Temperature: ${device.temperature}°C`);
       updateTemperature(device);
 
-      // Mesajı NATS sunucusuna yayınla
+      // Publish device temperature to NATS
       nc.publish('deviceTemperature', JSON.stringify(device));
-      console.log(`Device ${device.id} - Temperature: ${device.temperature}°C`);
     });
   }, 10000);
+}).catch((err) => {
+  console.error(err);
 });
 
 console.log(`Simulating ${numDevices} imaginary devices...`);
