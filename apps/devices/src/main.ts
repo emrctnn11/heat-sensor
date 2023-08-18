@@ -44,6 +44,7 @@ function updateTemperature(device: Device) {
   device.temperature = generateRandomTemperature();
 }
 
+// send to the NATS server
 ncPromise.then(nc => {
   console.log('Connected to NATS server.');
   setInterval(() => {
@@ -59,38 +60,8 @@ ncPromise.then(nc => {
   console.error(err);
 });
 
-// async function persistData() {
-//   const nc = await connect(natsOptions)
 
-//   const subscription = nc.subscribe('deviceTemperature');
-
-//   (async function processMessages() {
-//     for await (const msg of subscription) {
-//       const data = JSON.parse(new TextDecoder().decode(msg.data)) as Device;
-
-//       const insertQuery = `INSERT INTO devices (id, temperature) VALUES (${data.id}, ${data.temperature})`;
-//       const values = [data.id, data.temperature];
-
-//       const client = new Client(dbConfig);
-//       await client.connect();
-
-//       try {
-//         await client.query(insertQuery, values);
-//         console.log('Data successfully inserted');
-//       } catch (error) {
-//         console.error('Error while inserting data:', error);
-//       } finally {
-//         client.end();
-//       }
-//     }
-//   })();
-
-//   process.on('SIGINT', async () => {
-//     await nc.close(); // Close NATS connection
-//     process.exit();
-//   });
-// }
-
+// Subs NATS server and persist data to DB when a message is received
 async function persistData() {
   const nc = await connect(natsOptions)
 
