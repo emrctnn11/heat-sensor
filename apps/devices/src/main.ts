@@ -1,12 +1,23 @@
-import { ConnectionOptions, NatsConnection, connect } from 'nats';
+import { ConnectionOptions, NatsConnection, connect} from 'nats';
+import { Client} from 'pg';
 
 interface Device {
   id: number;
   temperature: number;
 }
 
+const dbConfig = {
+  user: 'postgres',
+  host: 'localhost',
+  database: 'heat-sensor-db',
+  password: '123456',
+  port: 5432,
+};
+
+
+
 const devices: Device[] = [];
-const numDevices = 1000;
+const numDevices = 3;
 
 // NATS SERVER CONNECTION
 const natsOptions: ConnectionOptions = {
@@ -48,4 +59,68 @@ ncPromise.then(nc => {
   console.error(err);
 });
 
-console.log(`Simulating ${numDevices} imaginary devices...`);
+// async function persistData() {
+//   const nc = await connect(natsOptions)
+
+//   const subscription = nc.subscribe('deviceTemperature');
+
+//   (async function processMessages() {
+//     for await (const msg of subscription) {
+//       const data = JSON.parse(new TextDecoder().decode(msg.data)) as Device;
+
+//       const insertQuery = `INSERT INTO devices (id, temperature) VALUES (${data.id}, ${data.temperature})`;
+//       const values = [data.id, data.temperature];
+
+//       const client = new Client(dbConfig);
+//       await client.connect();
+
+//       try {
+//         await client.query(insertQuery, values);
+//         console.log('Data successfully inserted');
+//       } catch (error) {
+//         console.error('Error while inserting data:', error);
+//       } finally {
+//         client.end();
+//       }
+//     }
+//   })();
+
+//   process.on('SIGINT', async () => {
+//     await nc.close(); // Close NATS connection
+//     process.exit();
+//   });
+// }
+
+async function persistData() {
+  const nc = await connect(natsOptions)
+
+  const subscription = nc.subscribe('deviceTemperature');
+
+  (async function processMessages() {
+    for await (const msg of subscription) {
+      const data = JSON.parse(new TextDecoder().decode(msg.data)) as Device;
+
+      const insertQuery = `INSERT INTO devices (id, temperature) VALUES ($1, $2)`; // Use placeholders
+      const values = [data.id, data.temperature];
+
+      const client = new Client(dbConfig);
+      await client.connect();
+
+      try {
+        await client.query(insertQuery, values);
+        console.log('Data successfully inserted');
+      } catch (error) {
+        console.error('Error while inserting data:', error);
+      } finally {
+        client.end();
+      }
+    }
+  })();
+
+  process.on('SIGINT', async () => {
+    await nc.close(); // Close NATS connection
+    process.exit();
+  });
+}
+
+persistData().catch(error => console.error('Error:', error));
