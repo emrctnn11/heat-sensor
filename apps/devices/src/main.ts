@@ -62,36 +62,36 @@ ncPromise.then(nc => {
 
 
 // Subs NATS server and persist data to DB when a message is received
-async function persistData() {
-  const nc = await connect(natsOptions)
+// async function persistData() {
+//   const nc = await connect(natsOptions)
 
-  const subscription = nc.subscribe('deviceTemperature');
+//   const subscription = nc.subscribe('deviceTemperature');
 
-  (async function processMessages() {
-    for await (const msg of subscription) {
-      const data = JSON.parse(new TextDecoder().decode(msg.data)) as Device;
+//   (async function processMessages() {
+//     for await (const msg of subscription) {
+//       const data = JSON.parse(new TextDecoder().decode(msg.data)) as Device;
 
-      const insertQuery = `INSERT INTO devices (id, temperature) VALUES ($1, $2)`; // Use placeholders
-      const values = [data.id, data.temperature];
+//       const insertQuery = `INSERT INTO devices (id, temperature) VALUES ($1, $2)`; // Use placeholders
+//       const values = [data.id, data.temperature];
 
-      const client = new Client(dbConfig);
-      await client.connect();
+//       const client = new Client(dbConfig);
+//       await client.connect();
 
-      try {
-        await client.query(insertQuery, values);
-        console.log('Data successfully inserted');
-      } catch (error) {
-        console.error('Error while inserting data:', error);
-      } finally {
-        client.end();
-      }
-    }
-  })();
+//       try {
+//         await client.query(insertQuery, values);
+//         console.log('Data successfully inserted');
+//       } catch (error) {
+//         console.error('Error while inserting data:', error);
+//       } finally {
+//         client.end();
+//       }
+//     }
+//   })();
 
-  process.on('SIGINT', async () => {
-    await nc.close(); // Close NATS connection
-    process.exit();
-  });
-}
+//   process.on('SIGINT', async () => {
+//     await nc.close(); // Close NATS connection
+//     process.exit();
+//   });
+// }
 
-persistData().catch(error => console.error('Error:', error));
+// persistData().catch(error => console.error('Error:', error));

@@ -14,7 +14,18 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@heat-sensor/api/cqrs": ["libs/api/cqrs/src/index.ts"],
+      "@heat-sensor/api/models": ["libs/api/models/src/index.ts"],
+      "@heat-sensor/cqrs": ["libs/cqrs/src/index.ts"],
+      "@heat-sensor/database-services": ["libs/database-services/src/index.ts"],
+      "@heat-sensor/database-services/cqrs": [
+        "libs/database-services/cqrs/src/index.ts"
+      ],
+      "@heat-sensor/graphql": ["libs/graphql/src/index.ts"],
+      "@heat-sensor/graphql/cqrs": ["libs/graphql/cqrs/src/index.ts"],
+      "@heat-sensor/models": ["libs/models/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
