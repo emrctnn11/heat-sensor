@@ -1,5 +1,5 @@
 export class DeviceHeatSensorQuery{
   constructor(
-      public readonly id?: number
+      public readonly id: number,
   ){}
 }

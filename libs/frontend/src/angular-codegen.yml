@@ -1,0 +1,16 @@
+overwrite: true
+schema: 'http://localhost:3000/graphql'
+documents:
+  - 'http://localhost:3000/graphql':
+      loader: ./libs/frontend/shared/graphql/src/operations-from-schema.graphql.js
+generates:
+  libs/frontend/shared/graphql/src/angular-graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-apollo-angular
+    config:
+      apolloAngularVersion: 1
+      serviceName: 'GraphqlService'
+      dedupeOperationSuffix: true
+      declarationKind: 'class'

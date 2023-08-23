@@ -22,9 +22,12 @@
       "@heat-sensor/database-services/cqrs": [
         "libs/database-services/cqrs/src/index.ts"
       ],
+      "@heat-sensor/frontend": ["libs/frontend/src/index.ts"],
+      "@heat-sensor/frontend/services": ["libs/services/src/index.ts"],
       "@heat-sensor/graphql": ["libs/graphql/src/index.ts"],
       "@heat-sensor/graphql/cqrs": ["libs/graphql/cqrs/src/index.ts"],
-      "@heat-sensor/models": ["libs/models/src/index.ts"]
+      "@heat-sensor/models": ["libs/models/src/index.ts"],
+      "@heat-sensor/services": ["libs/services/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
