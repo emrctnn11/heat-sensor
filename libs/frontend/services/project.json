@@ -2,15 +2,10 @@
   "name": "services",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/services/src",
+  "prefix": "heat-sensor",
+  "tags": [],
   "projectType": "library",
   "targets": {
-    "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["libs/services/**/*.ts"]
-      }
-    },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
@@ -24,7 +19,13 @@
           "codeCoverage": true
         }
       }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/services/**/*.ts", "libs/services/**/*.html"]
+      }
     }
-  },
-  "tags": []
+  }
 }
