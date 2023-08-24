@@ -17,6 +17,9 @@ const getSchemaFromUrl = async (url: string) => {
 
   if (response) {
     return buildClientSchema(response.data.data);
+  } else {
+    // Handle error here
+    throw new Error('Failed to retrieve schema from URL');
   }
 };
 

@@ -1,0 +1,16 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+directive @upper on FIELD_DEFINITION
+
+type DeviceHeatSensorObjectType {
+  id: Float!
+  temperature: Float!
+  updatedat: Float!
+}
+
+type Query {
+  sayHello: String!
+  DeviceHeatSensor(id: Float!): DeviceHeatSensorObjectType!
+}

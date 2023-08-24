@@ -4,13 +4,13 @@ import { Args, Query, Resolver } from '@nestjs/graphql';
 import { DeviceHeatSensorQuery } from '@heat-sensor/api/cqrs';
 
 @Resolver()
-export class AdminCustomerResolver {
+export class DeviceResolver {
   constructor(
     private readonly queryBus: QueryBus,
   ) {}
 
   @Query(() => String)
-  hello() {
+  sayHello(): string {
     return 'Hello World!';
   }
 
@@ -27,5 +27,6 @@ export class AdminCustomerResolver {
       )
     );
   }
-
 }
+
+
