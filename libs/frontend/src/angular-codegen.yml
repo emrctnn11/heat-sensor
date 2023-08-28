@@ -2,9 +2,9 @@ overwrite: true
 schema: 'http://localhost:3000/graphql'
 documents:
   - 'http://localhost:3000/graphql':
-      loader: ./libs/frontend/shared/graphql/src/operations-from-schema.graphql.js
+      loader: ./libs/frontend/src/operations-from-schema.graphql.js
 generates:
-  libs/frontend/shared/graphql/src/angular-graphql.ts:
+  libs/frontend/src/angular-graphql.ts:
     plugins:
       - typescript
       - typescript-operations

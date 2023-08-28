@@ -1,5 +1,3 @@
-export class DeviceHeatSensorQuery{
-  constructor(
-      public readonly id: number,
-  ){}
-}
+import { IQuery } from '@nestjs/cqrs';
+
+export class AllDevicesQuery implements IQuery {}

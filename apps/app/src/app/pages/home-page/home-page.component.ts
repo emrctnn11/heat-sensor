@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { DeviceHeatSensorObjectType } from '@heat-sensor/api/models';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
+import { DeviceHeatSensorObjectType } from 'libs/frontend/src/angular-graphql';
+import { DeviceService } from 'libs/frontend/services/src/lib/devices/devices.service';
 
 @Component({
   selector: 'heat-sensor-home-page',
@@ -9,11 +10,12 @@ import { Observable } from 'rxjs';
 })
 export class HomePageComponent {
 
-  devicesSensor$: Observable<DeviceHeatSensorObjectType>;
+  devices$: Observable<DeviceHeatSensorObjectType> | undefined;
 
-  constructor() {
-    console.log('HomePageComponent');
 
-    // this.devicesSensor$ = this
+  constructor(
+    private readonly deviceService: DeviceService,
+  ) {
+    this.devices$ = this.deviceService.getDevices()
   }
 }

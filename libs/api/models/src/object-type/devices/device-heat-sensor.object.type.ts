@@ -4,12 +4,12 @@ import { Field, ObjectType } from '@nestjs/graphql';
 export class DeviceHeatSensorObjectType {
 
     @Field()
-    id: number;
+    id?: number;
 
     @Field()
     temperature?: number;
 
     @Field()
-    updatedat: number;
+    updatedat?: number;
 
 }

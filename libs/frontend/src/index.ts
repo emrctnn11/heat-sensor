@@ -1,1 +1,1 @@
-export * from './angular-graphql';
+export * from './angular-graphql'

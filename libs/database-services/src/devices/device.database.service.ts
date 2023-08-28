@@ -1,15 +1,18 @@
-import { Injectable } from "@nestjs/common";
+import { DeviceHeatSensorObjectType } from "@heat-sensor/api/models";
+import { Inject, Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class DeviceHeatSensorDatabaseService {
-  constructor() {
+  constructor(
+    @InjectRepository(DeviceHeatSensorObjectType)
+    private readonly deviceHeatSensorRepository: Repository<DeviceHeatSensorObjectType>,
+  ) {
     console.log('DeviceHeatSensorDatabaseService');
   }
 
-  getDevice = async (id: number) => {
-    console.log('DeviceHeatSensorDatabaseService.getDevice');
-    return {
-      id: id,
-    }
+  async findAll(): Promise<DeviceHeatSensorObjectType[]> {
+    return this.deviceHeatSensorRepository.find();
   }
 }
