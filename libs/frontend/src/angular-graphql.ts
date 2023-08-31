@@ -10,7 +10,7 @@ export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> =
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export class Scalars {
-  ID: { input: string; output: string; } | undefined
+  ID!: { input: string; output: string; };
   String!: { input: string; output: string; };
   Boolean!: { input: boolean; output: boolean; };
   Int!: { input: number; output: number; };
@@ -19,24 +19,31 @@ export class Scalars {
 
 export class DeviceHeatSensorObjectType {
   __typename?: 'DeviceHeatSensorObjectType';
-  id!: Scalars['Float']['output'];
-  temperature!: Scalars['Float']['output'];
-  updatedat!: Scalars['Float']['output'];
+  id!: Scalars['Int']['output'];
+  temperature?: Maybe<Scalars['Float']['output']>;
+  updatedat?: Maybe<Scalars['Float']['output']>;
 };
 
 export class Query {
   __typename?: 'Query';
-  AllDevices!: Array<DeviceHeatSensorObjectType>;
+  DeviceHeatSensor!: DeviceHeatSensorObjectType;
 };
 
-export type AllDevices_QueryVariables = Exact<{ [key: string]: never; }>;
+
+export class QueryDeviceHeatSensorArgs {
+  id?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type DeviceHeatSensor_QueryVariables = Exact<{
+  id?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
-export type AllDevices_Query = { __typename?: 'Query', AllDevices: Array<{ __typename?: 'DeviceHeatSensorObjectType', id: number, temperature: number, updatedat: number }> };
+export type DeviceHeatSensor_Query = { __typename?: 'Query', DeviceHeatSensor: { __typename?: 'DeviceHeatSensorObjectType', id: number, temperature?: number | null, updatedat?: number | null } };
 
-export const AllDevices_QueryDocument = gql`
-    query AllDevices_query {
-  AllDevices {
+export const DeviceHeatSensor_QueryDocument = gql`
+    query DeviceHeatSensor_query($id: String) {
+  DeviceHeatSensor(id: $id) {
     id
     temperature
     updatedat
@@ -47,8 +54,8 @@ export const AllDevices_QueryDocument = gql`
   @Injectable({
     providedIn: 'root'
   })
-  export class AllDevices_QueryGQL extends Apollo.Query<AllDevices_Query, AllDevices_QueryVariables> {
-    override document = AllDevices_QueryDocument;
+  export class DeviceHeatSensor_QueryGQL extends Apollo.Query<DeviceHeatSensor_Query, DeviceHeatSensor_QueryVariables> {
+    override document = DeviceHeatSensor_QueryDocument;
 
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

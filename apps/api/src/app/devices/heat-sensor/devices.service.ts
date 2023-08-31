@@ -35,7 +35,7 @@ export class DevicesService implements OnModuleInit {
   }
 
   async startNatsSubscription() {
-    const subscription = (await this.nc).subscribe('deviceTemperature');
+    const subscription = (await this.nc).subscribe('stream-device');
 
     for await (const msg of subscription) {
       const data = JSON.parse(new TextDecoder().decode(msg.data)) as Device;

@@ -1,2 +1,2 @@
-export * from './lib/api-cqrs.module';
-export * from './devices';
+export * from './queries';
+export * from './sensor.cqrs.module';

@@ -1,15 +1,15 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class DeviceHeatSensorObjectType {
 
-    @Field()
+    @Field(type => Int)
     id?: number;
 
-    @Field()
+    @Field({ nullable: true })
     temperature?: number;
 
-    @Field()
+    @Field({ nullable: true })
     updatedat?: number;
 
 }

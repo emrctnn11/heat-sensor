@@ -7,8 +7,16 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { DirectiveLocation, GraphQLDirective } from 'graphql';
 import { resolvers } from './app-resolvers';
 import { CqrsModule } from '@nestjs/cqrs';
+import { SensorCqrsModule } from '@heat-sensor/api/cqrs';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { typeOrmEntities } from '@heat-sensor/entities';
+import { typeOrmConfig } from '@heat-sensor/constants';
+
 @Module({
-  imports: [
+  imports: [TypeOrmModule.forRoot({
+    ...typeOrmConfig.postgres,
+    entities: [...typeOrmEntities],
+  } as TypeOrmModuleOptions),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
@@ -23,6 +31,7 @@ import { CqrsModule } from '@nestjs/cqrs';
       },
     }),
     CqrsModule,
+    SensorCqrsModule,
   ],
   controllers: [AppController],
   providers: [AppService, ...resolvers],

@@ -1,2 +1,2 @@
-export * from './lib/database-services.module';
 export * from './devices';
+export * from './database-service.module';

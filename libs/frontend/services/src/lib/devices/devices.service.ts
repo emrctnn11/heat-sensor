@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { DeviceHeatSensorObjectType, AllDevices_QueryGQL} from 'libs/frontend/src/angular-graphql';
+import { DeviceHeatSensorObjectType, DeviceHeatSensor_QueryGQL} from 'libs/frontend/src/angular-graphql';
 
 @Injectable()
 export class DeviceService {
   constructor(
-    private readonly deviceQuery: AllDevices_QueryGQL,
+    private readonly deviceQuery: DeviceHeatSensor_QueryGQL,
   ) {
 
   }
