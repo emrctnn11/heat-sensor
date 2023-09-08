@@ -1,48 +1,42 @@
-import { ConnectionOptions, NatsConnection, connect } from 'nats';
-interface Device {
-  id: number;
-  temperature: number;
-};
+import {connect, JSONCodec} from 'nats';
 
-const devices: Device[] = [];
-const numDevices = 1000;
+const jsonCodec = JSONCodec();
 
-// NATS SERVER CONNECTION
-const natsOptions: ConnectionOptions = {
-  servers: ['nats://localhost:4222']
-};
+(async () => {
+  try {
+    const natsConnection = await connect({ servers: "nats://localhost:4222" });
 
-const ncPromise: Promise<NatsConnection> = connect(natsOptions);
+    const sendDeviceDataToNats = ({ deviceId, temperature, dateTime }) => {
+      natsConnection.publish(
+        "temperature-subject",
+        jsonCodec.encode({
+          deviceId,
+          temperature,
+          dateTime,
+        })
+      );
+    };
 
-// Create imaginary devices
-for (let i = 0; i < numDevices; i++) {
-  devices.push({
-    id: i,
-    temperature: generateRandomTemperature(),
-  });
-}
+    const generateSensorData = () => {
+      const devices = [...Array(1000).keys()];
+      let currentDeviceIndex = 0;
+      setInterval(() => {
+        for (let i = 0; i < 100; i++) {
+          const deviceId = devices[currentDeviceIndex];
+          const temperature = Math.random() * 100;
+          const dateTime = new Date();
+          sendDeviceDataToNats({ deviceId, temperature, dateTime });
+          currentDeviceIndex++;
+        }
+        if (currentDeviceIndex === devices.length) {
+          currentDeviceIndex = 0;
+        }
+      }, 1000);
+    };
 
-// Generate random temperature
-function generateRandomTemperature() {
-  return Math.floor(Math.random() * 50) + 10;
-}
-
-// Update temperature
-function updateTemperature(device: Device) {
-  device.temperature = generateRandomTemperature();
-}
-
-// send to the NATS server
-ncPromise.then(nc => {
-  setInterval(() => {
-    devices.map((device) => {
-      console.log(`Device ${device.id} - Temperature: ${device.temperature}°C`);
-      updateTemperature(device);
-
-      // Publish device temperature to NATS
-      nc.publish('stream-device', JSON.stringify(device));
-    });
-  }, 10000);
-}).catch((err) => {
-  console.error(err);
-});
+    generateSensorData();
+    console.log('application started...');
+  } catch (error) {
+    console.error("An error occurred:", error);
+  }
+})();

@@ -16,7 +16,7 @@ export class DeviceResolver {
   async DeviceHeatSensor(
     @Args('id', { nullable: true }) id: string
   ) {
-    console.log('DeviceResolver - DeviceHeatSensor query triggered with id:');
+    console.log('DeviceResolver');
     return await this.queryBus.execute(
       new AllDevicesQuery(id)
     );

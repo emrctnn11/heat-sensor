@@ -10,7 +10,7 @@ export interface Device {
 @Injectable()
 export class DevicesService implements OnModuleInit {
   private client: Client;
-  private nc: Promise<NatsConnection>;
+  private nc: NatsConnection;
 
   private readonly dbConfig = {
     user: 'postgres',
@@ -26,7 +26,7 @@ export class DevicesService implements OnModuleInit {
 
   constructor() {
     this.client = new Client(this.dbConfig);
-    this.nc = connect(this.natsOptions);
+
   }
 
   async onModuleInit() {
@@ -35,7 +35,11 @@ export class DevicesService implements OnModuleInit {
   }
 
   async startNatsSubscription() {
-    const subscription = (await this.nc).subscribe('stream-device');
+    if(this.nc.isClosed()){
+      this.nc = await connect(this.natsOptions);
+    }
+
+    const subscription = await this.nc.subscribe('stream-device');
 
     for await (const msg of subscription) {
       const data = JSON.parse(new TextDecoder().decode(msg.data)) as Device;
